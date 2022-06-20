@@ -21,17 +21,22 @@ const articleSchema = {
 
 const Article = mongoose.model("Article", articleSchema);
 
-app.get("/articles", function(req, res){
+//route method helps to use a particular route here it is "articles"
+app.route("/articles")
+
+//get method
+.get(function(req, res){
     Article.find(function(err, foundArticles){
         if(!err){
-            res.send();
+            res.send(foundArticles);
         } else {
             res.send(err);
         }
     });
-});
+})
 
-app.post("/articles", function(req, res){
+//post method
+.post(function(req, res){
 
     const newArticle = new Article({
         title: req.body.title,
@@ -46,6 +51,18 @@ app.post("/articles", function(req, res){
         }
     });
 })
+
+//delete method
+.delete(function(req, res){
+    Article.deleteMany(function (err){
+        if(!err){
+            res.send("Succesfully deleted all articles");
+        } else {
+            res.send(err);
+        }
+    });
+});
+
 
 app.listen(3000, function() {
     console.log("Server started on port 3000");
