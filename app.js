@@ -21,7 +21,8 @@ const articleSchema = {
 
 const Article = mongoose.model("Article", articleSchema);
 
-//route method helps to use a particular route here it is "articles"
+////////////////////////////////////////////////// requesting targetting articles////////////////////////////////////////////////////////
+//rought method helps to use a particular route here it is "articles"
 app.route("/articles")
 
 //get method
@@ -63,6 +64,30 @@ app.route("/articles")
     });
 });
 
+////////////////////////////////////////////////// requesting targeting a specific article////////////////////////////////////////////////
+
+app.route("/articles/:articleTitle")
+.get(function(req, res){
+    Article.findOne({title: req.params.articleTitle},function(err,foundArticle){
+        if(foundArticle){
+          res.send(foundArticle);
+        }else{
+          res.send("No articles matching that title was found.");
+       }
+    });
+})
+
+.put(function(req, res){
+    Article.updateOne(
+        {title: req.params.articleTitle},
+        req.body,
+        function(err){
+            if(!err){
+                res.send("Successfully updated article.");
+            }
+        }
+    );
+});
 
 app.listen(3000, function() {
     console.log("Server started on port 3000");
